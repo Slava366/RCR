@@ -1,3 +1,38 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'org.flywaydb', name: 'flyway-gradle-plugin', version: '5.1.4'
+        classpath group: 'com.h2database', name: 'h2', version: '1.4.191'
+        classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: '1.5.3.RELEASE'
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    dependencies {
+        compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+        compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+        testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.2.0'
+    }
+}
+
 project(':simple-servlet') {
-  apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'org.flywaydb.flyway'
+
+    dependencies {
+        compile group: 'org.flywaydb', name: 'flyway-core'
+        compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+        compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+        compile group: 'com.h2database', name: 'h2', version: '1.4.197'
+        testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    }
 }
