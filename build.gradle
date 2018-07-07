@@ -1,0 +1,3 @@
+project(':simple-servlet') {
+  apply plugin: 'java'
+}
