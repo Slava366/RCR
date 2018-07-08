@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <title>Добавление сотрудника...</title>
+    <link rel="stylesheet" href="../static/css/default.css" th:href="@{/css/default.css}" type="text/css" />
+</head>
+<body>
+    <h3>Добавление сотрудника, отсутствовавшего на работе</h3>
+    <h4 th:if="${employeeAdded}">Сотрудник добавлен!</h4>
+    <form th:action="@{/add}" method="post">
+        <h4 th:if="${!fioAdded}">Вы не указали ФИО!</h4>
+        <div>ФИО:
+            <select name="fio" th:if="${employees.size() > 0}">
+                <option th:each="employee : ${employees}" th:inline="text" th:selected="${employee.getFio().equals(fio)}">[[${employee.getFio()}]]</option>
+            </select>
+            <input th:if="${employees.size() == 0}" type="text" name="fio" />
+        </div>
+        <h4 th:if="${!positionAdded}">Вы не указали должность!</h4>
+        <div>Должность:
+            <select name="position" th:if="${positions.size() > 0}">
+                <option th:each="position : ${positions}" th:inline="text" th:selected="${position.getName().equals(posName)}">[[${position.getName()}]]</option>
+            </select>
+            <input th:if="${positions.size() == 0}" type="text" name="position" />
+        </div>
+        <h4 th:if="${!dateAdded}">Вы не указали дату!</h4>
+        <div>Дата отсутствия: <input type="date" name="date" th:value="${date}" /></div>
+        <h4 th:if="${!timeAdded}">Вы не указали время!</h4>
+        <div>Отсутствовал с: <input type="time" name="fromTime" th:value="${fromTime}" /> до <input type="time" name="toTime" th:value="${toTime}" /></div>
+        <h4 th:if="${!reasonAdded}">Вы не указали причину!</h4>
+        <div>Причина отсутствия: <input type="text" name="reason" th:value="${reason}" /></div>
+        <div><input type="hidden" name="sent" value="true" /></div>
+        <div><input type="submit" value="Добавить сотрудника" /></div>
+    </form>
+    <p><a th:href="@{/home}">Вернуться на главную страницу...</a></p>
+</body>
+</html>

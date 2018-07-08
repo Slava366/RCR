@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Табель...</title>
+    <link rel="stylesheet" href="../static/css/default.css" th:href="@{/css/default.css}" type="text/css" />
+</head>
+<body>
+    <h3>Список сотрудников, отсутствовавших на работе:</h3>
+    <h3 th:if="${reportDeleted}">Сотрудник удален!</h3>
+    <h3 th:if="${reports.size() == 0}">Табель пуст!</h3>
+    <table th:if="${reports.size() > 0}" border="1">
+        <tr>
+            <td><b>Идентификатор</b></td>
+            <td><b>ФИО</b></td>
+            <td><b>Должность</b></td>
+            <td><b>Дата отсутствия</b></td>
+            <td><b>Время отсутствия</b></td>
+            <td><b>Причина</b></td>
+            <td><b>Действия</b></td>
+        </tr>
+        <tr th:each="report : ${reports}">
+            <td th:text="${report.getId()}"></td>
+            <td th:text="${report.getFio()}"></td>
+            <td th:text="${report.getPosition()}"></td>
+            <td th:text="${report.getFormatDate()}"></td>
+            <td th:text="${report.getFormatTime()}"></td>
+            <td th:text="${report.getReason()}"></td>
+            <td>
+                <form th:action="@{/users}" method="post">
+                    <input type="hidden" name="reportId" th:value="${report.getId()}" />
+                    <input type="submit" value="Удалить"/>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <p><a th:href="@{/home}">Вернуться на главную страницу...</a></p>
+</body>
+</html>
