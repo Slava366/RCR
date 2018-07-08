@@ -8,28 +8,52 @@
     <h3>Добавление сотрудника, отсутствовавшего на работе</h3>
     <h4 th:if="${employeeAdded}">Сотрудник добавлен!</h4>
     <form th:action="@{/add}" method="post">
-        <h4 th:if="${!fioAdded}">Вы не указали ФИО!</h4>
-        <div>ФИО:
-            <select name="fio" th:if="${employees.size() > 0}">
-                <option th:each="employee : ${employees}" th:inline="text" th:selected="${employee.getFio().equals(fio)}">[[${employee.getFio()}]]</option>
-            </select>
-            <input th:if="${employees.size() == 0}" type="text" name="fio" />
-        </div>
-        <h4 th:if="${!positionAdded}">Вы не указали должность!</h4>
-        <div>Должность:
-            <select name="position" th:if="${positions.size() > 0}">
-                <option th:each="position : ${positions}" th:inline="text" th:selected="${position.getName().equals(posName)}">[[${position.getName()}]]</option>
-            </select>
-            <input th:if="${positions.size() == 0}" type="text" name="position" />
-        </div>
-        <h4 th:if="${!dateAdded}">Вы не указали дату!</h4>
-        <div>Дата отсутствия: <input type="date" name="date" th:value="${date}" /></div>
-        <h4 th:if="${!timeAdded}">Вы не указали время!</h4>
-        <div>Отсутствовал с: <input type="time" name="fromTime" th:value="${fromTime}" /> до <input type="time" name="toTime" th:value="${toTime}" /></div>
-        <h4 th:if="${!reasonAdded}">Вы не указали причину!</h4>
-        <div>Причина отсутствия: <input type="text" name="reason" th:value="${reason}" /></div>
-        <div><input type="hidden" name="sent" value="true" /></div>
-        <div><input type="submit" value="Добавить сотрудника" /></div>
+    <table border="1" cellpadding="2" cellspacing="2">
+        <tr th:if="${!fioAdded}"><td colspan="2" bgcolor="#ff9999">ФИО не указано или указано неверно!</td></tr>
+        <tr>
+            <td>ФИО:</td>
+            <td>
+                <select name="fio" th:if="${employees.size() > 0}">
+                    <option th:each="employee : ${employees}" th:inline="text" th:selected="${employee.getFio().equals(fio)}">[[${employee.getFio()}]]</option>
+                </select>
+                <input th:if="${employees.size() == 0}" type="text" name="fio" />
+            </td>
+        </tr>
+        <tr th:if="${!positionAdded}"><td colspan="2" bgcolor="#ff9999">Должность не указана или указана неверно!</td></tr>
+        <tr>
+            <td>Должность:</td>
+            <td>
+                <select name="position" th:if="${positions.size() > 0}">
+                    <option th:each="position : ${positions}" th:inline="text" th:selected="${position.getName().equals(posName)}">[[${position.getName()}]]</option>
+                </select>
+                <input th:if="${positions.size() == 0}" type="text" name="position" />
+            </td>
+        </tr>
+        <tr th:if="${!dateAdded}"><td colspan="2" bgcolor="#ff9999">Выберите дату!</td></tr>
+        <tr>
+            <td>Дата отсутствия:</td>
+            <td><input type="date" name="date" th:value="${date}" /></td>
+        </tr>
+        <tr th:if="${!timeAdded}"><td colspan="2" bgcolor="#ff9999">Вы не указали время или указали не в том порядке!</td></tr>
+        <tr>
+            <td>Отсутствовал:</td>
+            <td>
+                c <input type="time" name="fromTime" th:value="${fromTime}" />
+                до <input type="time" name="toTime" th:value="${toTime}" />
+            </td>
+        </tr>
+        <tr th:if="${!reasonAdded}"><td colspan="2" bgcolor="#ff9999">Укажите причину отсутствия!</td></tr>
+        <tr>
+            <td>Причина отсутствия:</td>
+            <td><input type="text" name="reason" th:value="${reason}" /></td>
+        </tr>
+        <tr>
+           <td colspan="2" align="right">
+               <input type="hidden" name="sent" value="true" />
+               <input type="submit" value="Добавить сотрудника" />
+           </td>
+        </tr>
+    </table>
     </form>
     <p><a th:href="@{/home}">Вернуться на главную страницу...</a></p>
 </body>
