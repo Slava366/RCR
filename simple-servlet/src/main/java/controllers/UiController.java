@@ -139,18 +139,33 @@ public class UiController {
     }
 
 
-    @RequestMapping("/users")
+
+    @RequestMapping("/report")
     public String reportTable(@RequestParam(value = "reportId", defaultValue = "") String reportId,
+                              @RequestParam(value = "fio", defaultValue = "") String fio,
+                              @RequestParam(value = "position", defaultValue = "") String position,
+                              @RequestParam(value = "date", defaultValue = "0000-00-00") String date,
                               Model model) {
+        // Удаляем выбранную запись
         boolean reportDeleted = false;
         if(!reportId.isEmpty()) {
             reportRepository.delete(Integer.parseInt(reportId));
             reportDeleted = true;
         }
         model.addAttribute("reportDeleted", reportDeleted);
-        // Табель
-        Iterable<Report> reports = reportRepository.findAll();
-        model.addAttribute("reports", reports);
-        return "users";
+        // Передаем список сотрудников для сортировки
+        Iterable<String> employees = reportRepository.getEmployees();
+        model.addAttribute("employees", employees);
+        // Передаем список должностей
+        Iterable<String> positions = reportRepository.getPositions();
+        model.addAttribute("positions", positions);
+        // Передаем список дат
+        Iterable<String> dates = reportRepository.getDates();
+        model.addAttribute("dates", dates);
+        // Возвращаем введенные поля
+        model.addAttribute("fio", fio);
+        model.addAttribute("position", position);
+        model.addAttribute("date", date);
+        return "report";
     }
 }

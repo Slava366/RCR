@@ -5,7 +5,35 @@
     <link rel="stylesheet" href="../static/css/default.css" th:href="@{/css/default.css}" type="text/css" />
 </head>
 <body>
+    <h3>Выберите параметры сортировки:</h3>
+    <form th:action="@{/report}" method="post">
+    <table border="1" cellspacing="2" cellpadding="2">
+        <tr>
+            <td>
+                <select name="fio" >
+                    <option th:selected="${fio.isEmpty()}" value="">Все сотрудники</option>
+                    <option th:each="employee : ${employees}" th:selected="${fio.equals(employee)}" th:inline="text">[[${employee}]]</option>
+                </select>
+            </td>
+            <td>
+                <select name="position" >
+                    <option th:selected="${position.isEmpty()}" value="">Все должности</option>
+                    <option th:each="posName : ${positions}" th:selected="${position.equals(posName)}" th:inline="text">[[${posName}]]</option>
+                </select>
+            </td>
+            <td>
+                <select name="date" >
+                    <option th:selected="${date.isEmpty()}" value="">Все должности</option>
+                    <option th:each="dateVal : ${dates}" th:selected="${date.equals(dateVal)}" th:inline="text">[[${dateVal}]]</option>
+                </select>
+            </td>
+            <td><input type="submit" name="sent" value="Показать" /></td>
+        </tr>
+    </table>
+    </form>
+
     <h3>Список сотрудников, отсутствовавших на работе:</h3>
+<!--
     <h3 th:if="${reportDeleted}">Сотрудник удален!</h3>
     <h3 th:if="${reports.size() == 0}">Табель пуст!</h3>
     <table th:if="${reports.size() > 0}" border="1">
@@ -33,6 +61,7 @@
             </td>
         </tr>
     </table>
+-->
     <p><a th:href="@{/home}">Вернуться на главную страницу...</a></p>
 </body>
 </html>
