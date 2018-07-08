@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Сущность записи табеля
+ */
 @Entity
 @Table(name = "REPORTS")
 public class Report {
@@ -11,30 +14,26 @@ public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
-    private int id;
+    private int id;             // Идентификатор
 
     @Column(name = "E_FIO", nullable = false)
-    private String fio;
+    private String fio;         // ФИО сотрудника
 
     @Column(name = "P_NAME", nullable = false)
-    private String position;
+    private String position;    // Должность сотрудника
 
     @Column(name = "F_DATE", nullable = false)
-    private Date fromDate;
+    private Date fromDate;      // Начало пропуска
 
     @Column(name = "T_DATE", nullable = false)
-    private Date toDate;
+    private Date toDate;        // Конец пропуска
 
     @Column(name = "REASON", nullable = false)
-    private String reason;
+    private String reason;      // Причина
 
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getFio() {
@@ -77,16 +76,25 @@ public class Report {
         this.reason = reason;
     }
 
+
+    /**
+     * Возвращает дату без времени в виде строки
+     * @return - String dd.MM.yyyy
+     */
     public String getFormatDate() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         return simpleDateFormat.format(getFromDate());
     }
 
+    /**
+     * Возвращает диапазон отсутствия сотрудника в виде строки
+     * @return - String %02d ч. %02d мин. (с %s по %s)
+     */
     public String getFormatTime() {
         long diff = getToDate().getTime() - getFromDate().getTime();
-        long h = diff / 1000 / 60 / 60;
-        long m = (diff - h * 60 * 60 * 1000) / 1000 / 60;
+        long h = diff / 3_600_000;
+        long m = (diff - h * 3_600_000) / 60_000;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-        return String.format("%02d ч. %02d мин.\n(с %s по %s)", h, m, simpleDateFormat.format(getFromDate()), simpleDateFormat.format(getToDate()));
+        return String.format("%02d ч. %02d мин. (с %s по %s)", h, m, simpleDateFormat.format(getFromDate()), simpleDateFormat.format(getToDate()));
     }
 }

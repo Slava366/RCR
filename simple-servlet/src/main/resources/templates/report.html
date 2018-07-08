@@ -23,7 +23,7 @@
             </td>
             <td>
                 <select name="date" >
-                    <option th:selected="${date.isEmpty()}" value="">Все должности</option>
+                    <option th:selected="${date.isEmpty()}" value="">Все даты</option>
                     <option th:each="dateVal : ${dates}" th:selected="${date.equals(dateVal)}" th:inline="text">[[${dateVal}]]</option>
                 </select>
             </td>
@@ -33,9 +33,8 @@
     </form>
 
     <h3>Список сотрудников, отсутствовавших на работе:</h3>
-<!--
     <h3 th:if="${reportDeleted}">Сотрудник удален!</h3>
-    <h3 th:if="${reports.size() == 0}">Табель пуст!</h3>
+    <h3 th:if="${reports.size() == 0}">По вашему запросу ничего не найдено!</h3>
     <table th:if="${reports.size() > 0}" border="1">
         <tr>
             <td><b>Идентификатор</b></td>
@@ -54,14 +53,16 @@
             <td th:text="${report.getFormatTime()}"></td>
             <td th:text="${report.getReason()}"></td>
             <td>
-                <form th:action="@{/users}" method="post">
+                <form th:action="@{/report}" method="post">
+                    <input type="hidden" name="fio" th:value="${fio}" />
+                    <input type="hidden" name="position" th:value="${position}" />
+                    <input type="hidden" name="date" th:value="${date}" />
                     <input type="hidden" name="reportId" th:value="${report.getId()}" />
                     <input type="submit" value="Удалить"/>
                 </form>
             </td>
         </tr>
     </table>
--->
     <p><a th:href="@{/home}">Вернуться на главную страницу...</a></p>
 </body>
 </html>

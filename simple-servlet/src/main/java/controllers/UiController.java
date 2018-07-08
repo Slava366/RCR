@@ -3,6 +3,8 @@ package controllers;
 import entity.Employee;
 import entity.Position;
 import entity.Report;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import repository.EmployeeRepository;
 import repository.PositionRepository;
 import repository.ReportRepository;
+import simple.Application;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,6 +22,8 @@ import java.util.Date;
 
 @Controller
 public class UiController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -110,6 +115,7 @@ public class UiController {
                 report.setReason(reason);
                 reportRepository.save(report);
                 employeeAdded = true;
+                LOG.info(String.format("Сотрудник '%s' добавлен в табель!", report.getFio()));
             } else {
                 // Отправляем уже введенные поля в форму
                 if(fioAdded) model.addAttribute("fio", fio);
@@ -139,7 +145,15 @@ public class UiController {
     }
 
 
-
+    /**
+     * Управляемый табель
+     * @param reportId - запись в табеле на удаление
+     * @param fio - ФИО сотрудника для поиска
+     * @param position - должность для поиска
+     * @param date - дата для поиска
+     * @param model - ответ форме
+     * @return - report.html
+     */
     @RequestMapping("/report")
     public String reportTable(@RequestParam(value = "reportId", defaultValue = "") String reportId,
                               @RequestParam(value = "fio", defaultValue = "") String fio,
@@ -151,6 +165,7 @@ public class UiController {
         if(!reportId.isEmpty()) {
             reportRepository.delete(Integer.parseInt(reportId));
             reportDeleted = true;
+            LOG.info(String.format("Сотрудник с идентификатором '%s' удален из табеля!", reportId));
         }
         model.addAttribute("reportDeleted", reportDeleted);
         // Передаем список сотрудников для сортировки
@@ -162,6 +177,9 @@ public class UiController {
         // Передаем список дат
         Iterable<String> dates = reportRepository.getDates();
         model.addAttribute("dates", dates);
+        // Передаем необходимые записи табеля
+        Iterable<Report> reports = reportRepository.getReports(fio, position, date);
+        model.addAttribute("reports", reports);
         // Возвращаем введенные поля
         model.addAttribute("fio", fio);
         model.addAttribute("position", position);
